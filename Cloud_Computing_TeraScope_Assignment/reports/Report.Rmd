@@ -1,8 +1,9 @@
 ---
-title: '220238007 - CSC8634 TeraScope'
+title: "220238007 - CSC8634 TeraScope"
 author: "Prathik Pradeep"
 date: "2023-01-24"
-output: pdf_document
+output:
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -131,7 +132,7 @@ ggarrange(p1, p2, ncol = 2)
 
 ### 1.4.2    Relationship Between Event Name and Average Time Duration
 
-``` {r Event Name and Average Time Duration, echo = FALSE, fig.width=8, fig.height=4, fig.cap="Graphical Summary of Relationship Between Event Name and Average Time Duration"}
+``` {r Event Name and Average Time Duration, echo = FALSE, fig.width=6, fig.height=4, fig.cap="Graphical Summary of Relationship Between Event Name and Average Time Duration"}
 #Graphical Summary of Event Name vs Event Time in ms
 gpu_checkpoints %>%
   group_by(eventName)%>%
@@ -157,7 +158,7 @@ From Chapter 1.4.2, it is observed that the event with the highest event time is
 
 From the analysis conducted in Chapter 1.4, it is evident that the events Render, Uploading and Tiling are the most computationally taxing, whereas, the events Tiling and Uploading do not take very long to execute. This means, the event time render is very computationally taxing for large periods of time, while the events uploading and Tiling are for a much shorter duration. Calibrating the GPUs to maximise performance for the Render event could lead to a more efficient execution of the TotalRender process. This could help bring down the costs associated with power consumption and also with cooling the GPU to maintain it in the optimal window.    
 
-Therefore, reflecting on the business objective from Chapter 1.1.1, it can be concluded that the success criteria have been met, provided useful insight and hence, the analysis is proven to be successful.
+Therefore, reflecting on the business objective from Chapter 1.1.1, it can be concluded that the success criteria has been met, useful insights have been provided and hence, the analysis is proven to be successful.
 
 
 ## 1.6    FUTURE SCOPE
@@ -314,7 +315,7 @@ ggarrange(p1, p2, ncol = 2)
 
 ### 2.4.2    Relationship Between Zoom Level vs Render Time in ms
 
-``` {r Zoom Level vs Render Time in ms, echo = FALSE, fig.width=8, fig.height=4, fig.cap="Graphical Summary of Relationship Between Zoom Level vs Render Time in ms"}
+``` {r Zoom Level vs Render Time in ms, echo = FALSE, fig.width=6, fig.height=4, fig.cap="Graphical Summary of Relationship Between Zoom Level vs Render Time in ms"}
 #Graphical Summary of Zoom Level vs Render Time in ms
 gpu_checkpoints_task %>%
   group_by(level)%>%
@@ -338,7 +339,7 @@ As observed in Chapter 2.4, a similar trend can be observed when comparing the z
 
 As observed in Chapter 2.4.1, when comparing zoom levels and GPU temperatures, the zoom level difference in temperatures between zoom levels 4 and 8 is very small. This could indicate that they are not very computationally taxing.
 
-Therefore, reflecting on the business objective from Chapter 2.1.1, it can be concluded that the success criteria have been met, provided useful insight and hence, the analysis is proven to be successful.
+Therefore, reflecting on the business objective from Chapter 2.1.1, it can be concluded that the success criteria has been met, useful insights have been provided and hence, the analysis is proven to be successful.
 
 
 ## 2.6    FUTURE SCOPE
@@ -349,6 +350,147 @@ As discussed in Chapter 2.3.2, having access to the GPU Utilisation and the GPU 
 
 
 
-# 4   REFERENCES
+
+
+
+# 3   Question 3: Comparing the Different GPUs with their Average Metrics and Average Total Render Time 
+
+## 3.1    BUSINESS UNDERSTANDING
+### 3.1.1 Business Objectives
+
+Drawing a comparison between the average GPU metrics and average total render time can indicate whether the higher GPU metrics actually correlate to a decrease in total render time. This could be one of the most important analyses as it directly compares the GPU metrics and total render time. Being able to pin point which GPU metrics maximize performance and which GPU metrics compromise performance could provide very beneficial insights into the GPUs and their performance metrics.
+
+As mentioned in Chapter 1 and Chapter 2, the performance of a GPU could be defined by metrics like GPU Power Draw, GPU Temperature, GPU Utilisation and GPU Memory Utilisation [1]. However, the ultimate performance metric for GPUs is their render times [2].
+
+The success criteria for this business objective would be to identify a trend between GPU metrics and the total render times.  
+
+### 3.1.2 Data Mining Goals
+
+Based on the business objectives, looking for any relationship between GPU metrics and the total render time is vital. The next step could be to find the average total render time taken for each GPU and if there is any relationship between the GPU metrics and the total render time.
+
+### 3.1.3 Produce Project Plan
+
+To carry out to analysis to achieve the business objective, the data would first need to be understood. This would mean to understand and analyse all the data to find all the relevant variables useful for this particular analysis. Upon which the data would need to prepared as required, which generally includes cleaning, creating additional variables from the existing variables, merging the data if needed and formatting the data based on the requirements. The next step would be to carry out the required analysis and produce observations based on the results of the analysis. The results of the analysis would then be compared to the business objective to check whether it has been answered.
+
+The tools and techniques being used here are RStudio libraries like ggplot, dplyr, lubridate, ProjectTemplate and RMarkdown.
+
+
+## 3.2    DATA PREPERATION
+### 3.2.1   Selecting Data
+
+The data being selected are the application_checkpoints and gpu data sets. These data sets are selected as they contain the necessary variables to solve the business objectives.
+
+### 3.2.2   Format Data
+
+Changing the format of the timestamp in the application_checkpoints and gpu into the correct date time format, i.e. "YYYY-MM-DD HH:MM:SS.MSS". Converting the variable from character to date time datatype is also completed in this step. The data from application_checkpoints is sorted grouped, spread and the time difference for each event is calculated. Next the data set is filtered so it contains on TotalRender data. Finally, the columns "grouped_id", "START", "STOP","jobId","taskId" and"eventName" are removed.
+
+The data type of the GPU Serial variable in the gpu data set would need to converted from numeric to character. The gpu data is then grouped and aggregated on all the GPU metrics so the mean metrics for each GPU is calculated. 
+
+### 3.2.3   Integrate Data
+
+The applications_checkpoints data is then joined onto the gpu data by hostname and all the columns "hostname" and "gpuUUID" are removed.
+
+## 3.3    DATA UNDERSTANDING
+### 3.3.1   Describing and Exploring the Data
+
+Below, a glimpse of the gpu_checkpoints_task data set can be found. This is how the data looks after the joins are completed. This also gives a glimpse of how application_checkpoints and gpu data sets have been joined.
+
+```{r Glimpse after adding total render time to gpu data, echo = FALSE}
+#Glimpse of gpu_checkpoints
+glimpse(gpu_checkpoints_grouped)
+```
+
+Here it can be observed, for each hostname, a specific gpu is assigned which is referenced by its GPU Serial and GPU UUID.
+
+
+### 3.3.2   Data Quality
+
+After joining the table, it can be observed that almost all the necessary values are present however changing a few of the data types and formats is required Apart from this, the quality of the data required for this analysis is good. 
+
+
+## 3.4    ANALYSIS
+### 3.4.1    Relationship Between Average GPU Metrics vs Average Total Render Time in secs 
+
+From Figure 5, looking into the relationship between power draw and total render time, it can be observed that there is a positive correlation between the them. This means, as the power drawn by the GPU increases, the total render time also increases. It can also be observed that two clusters are being formed, one cluster functioning better at lower power draw and one cluster functioning poorly at higher power draw. 
+
+Looking into the relationship between GPU temperature and total render time, it can be observed that there is a negative correlation between them. This means, as the GPU temperature increases, the total render time decreases. It can also be observed that two clusters are being formed, one cluster functioning better at lower temperature and one cluster functioning poorly at higher temperatures.
+
+Looking into the relationship between GPU utilisation and total render time, it can be observed that there is a very strong positive correlation between them. This means, as the GPU utilisation increases, the total render time also  increases. It can also be observed that two clusters are being formed, one cluster in between 61 and 63 percent GPU utilisation and another cluster in between 64 and 66 percent GPU utilisation. 
+
+Looking into the relationship between GPU memory utilisation and total render time, it can be observed that there is a very strong positive correlation between them. This means, as the GPU memory utilisation increases, the total render time also  increases. It can also be observed that two clusters are being formed, one cluster in between 30 and 32 percent GPU memory utilisation and another cluster in between 35
+and 37 percent GPU memory utilisation. 
+
+``` {r Graphical Summary of Average GPU Metrics vs Average Total Render Time in secs, echo = FALSE, message=FALSE, fig.width=12, fig.height=12, fig.cap="Graphical Summary of Average GPU Metrics vs Average Total Render Time in secs"}
+
+#Graphical Summary of Average Power Draw in Watt vs Average Total Render Time in secs 
+p1 <- gpu_checkpoints_grouped%>%
+  ggplot(aes(x = powerDrawWatt, y = avg_eventTime_in_secs )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("Power Draw in Watt vs Total Render Time in secs") +
+  labs(x = "Average Power Draw in Watt", y = "Average Total Render Time in secs") + 
+  theme_minimal()
+
+
+#Graphical Summary of Average GPU Temperature in C vs Average Total Render Time in secs 
+p2 <- gpu_checkpoints_grouped%>%
+  ggplot(aes(x = gpuTempC, y = avg_eventTime_in_secs )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("GPU Temperature in C vs Total Render Time in secs") +
+  labs(x = "Average GPU Temperature in C", y = "Average Total Render Time in secs") + 
+  theme_minimal()
+
+#Graphical Summary of Average GPU Utilisation vs Average Total Render Time in secs 
+p3 <- gpu_checkpoints_grouped%>%
+  ggplot(aes(x = gpuUtilPerc, y = avg_eventTime_in_secs )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("GPU Utilisation vs Total Render Time in secs") +
+  labs(x = "Average GPU Utilisation", y = "Average Total Render Time in secs") + 
+  theme_minimal()
+
+#Graphical Summary of Average GPU Memory Utilisation vs Average Total Render Time in secs 
+p4 <- gpu_checkpoints_grouped%>%
+  ggplot(aes(x = gpuMemUtilPerc, y = avg_eventTime_in_secs )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("GPU Memory Utilisation vs Total Render Time in secs") +
+  labs(x = "Average GPU Memory Utilisation", y = "Average Total Render Time in secs") + 
+  theme_minimal()
+
+ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
+```
+
+
+## 3.5    EVALUATION AND FUTURE IMPLICATIONS
+
+As observed in Chapter 3.4, clear correlations can be observed when comparing the average GPU metrics with the average total render time. When comparing power draw, gpu utilisation and gpu memory utilisation to the total render time, a positive correlation can be observed. However, when comparing the GPU temperature to the total render time, a negative correlation can be observed. 
+
+In this case, a positive correlation means, as the GPU metric value increases, the total render time taken also decreases. Therefore, where a positive correlation is present, it means that as the GPU metrics increases, the total render time decreases.
+
+These trends could indicate that the GPUs that tend to function with a lower power supply, GPU utilisation, GPU memory utilisation and a higher GPU temperature leads to a lower total render time. The way the plots in Figure 5, it is also evident that there are 2 different GPUs used, which is why there are two significant clusters with different performance in each case.
+
+Therefore, reflecting on the business objective from Chapter 3.1.1, it can be concluded that the success criteria has been met, useful insights have been provided and hence, the analysis is proven to be successful.
+
+
+## 3.6    FUTURE SCOPE
+
+As discussed in Chapter 3.3.2, having more performance data about the GPUs as well as more GPU processors could help in delivering more detailed analyses and insights. Discovering more metrics to evaluate performance could also prove useful. 
+
+
+
+
+# 5   REFERENCES
 
 [1]   EXXACT (October 8, 2019). Top 5 Metrics for Evaluating Your Deep Learning Program's GPU Performance. Accessed on January 13, 2023. https://www.exxactcorp.com/blog/Deep-Learning/top-5-metrics-for-evaluating-your-deep-learning-program-s-gpu-performance
+
+[2]   Nicolas S. Holliman (February 2019) Petascale Cloud Supercomputing for Terapixel Visualization of a Digital Twin. Accessed on January 16, 2023. https://www.researchgate.net/publication/331086956_Petascale_Cloud_Supercomputing_for_Terapixel_Visualization_of_a_Digital_Twin
+
+[3]   https://www.researchgate.net/publication/354283459_AIPerf_Automated_machine_learning_as_an_AI-HPC_benchmark
+
+[4]   https://www.researchgate.net/publication/351440179_Resource_Aware_GPU_Scheduling_in_Kubernetes_Infrastructure/figures?lo=1
+
+[5]   https://www.researchgate.net/publication/312966519_Characterizing_Power_and_Performance_of_GPU_Memory_Access
+
+[6]   https://computerinfobits.com/why-is-my-graphics-card-underperforming/

@@ -80,3 +80,46 @@ gpu_checkpoints_task %>%
   ggtitle("Zoom Level vs Event Time in ms") +
   labs(x = "Zoom Level", y = "Event Time in ms") + 
   theme_minimal()
+
+
+
+####### Question 3
+#Graphical representation of Average Power Draw in Watt vs Average Total Render Time in secs 
+gpu_checkpoints_grouped%>%
+  ggplot(aes(x = powerDrawWatt, y = avg_eventTime_in_secs )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("Power Draw in Watt vs Total Render Time in secs") +
+  labs(x = "Average Power Draw in Watt", y = "Average Total Render Time in secs") + 
+  theme_minimal()
+
+
+#Graphical representation of Average GPU Temperature in C vs Average Total Render Time in secs 
+gpu_checkpoints_grouped%>%
+  ggplot(aes(x = gpuTempC, y = avg_eventTime_in_secs )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("GPU Temperature in C vs Total Render Time in secs") +
+  labs(x = "Average GPU Temperature in C", y = "Average Total Render Time in secs") + 
+  theme_minimal()
+
+
+#Graphical representation of Average GPU Utilisation vs Average Total Render Time in secs 
+gpu_checkpoints_grouped%>%
+  ggplot(aes(x = gpuUtilPerc, y = avg_eventTime_in_secs )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("GPU Utilisation vs Total Render Time in secs") +
+  labs(x = "Average GPU Utilisation", y = "Average Total Render Time in secs") + 
+  theme_minimal()
+
+
+#Graphical representation of Average GPU Memory Utilisation vs Average Total Render Time in secs 
+gpu_checkpoints_grouped%>%
+  ggplot(aes(x = gpuMemUtilPerc, y = avg_eventTime_in_secs )) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("GPU Memory Utilisation vs Total Render Time in secs") +
+  labs(x = "Average GPU Memory Utilisation", y = "Average Total Render Time in secs") + 
+  theme_minimal()
+

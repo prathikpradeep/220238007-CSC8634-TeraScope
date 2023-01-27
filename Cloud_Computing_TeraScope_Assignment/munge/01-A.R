@@ -1,6 +1,9 @@
 # setwd("/Volumes/Prathik/MSc Data Science/Semester 1/Block 3/Cloud Computing - CSC8634/Assignment/Assignment/220238007-CSC8634-TeraScope/Cloud_Computing_TeraScope_Assignment/data")
 # application_checkpoints <- read.csv("application_checkpoints.csv")
 
+library(ProjectTemplate)
+load.project()
+
 #Setting seed so results are reproducible
 set.seed(220238007)
 
@@ -22,25 +25,6 @@ gpu$timestamp <- ymd_hms(gpu %>%
 
 #Converting gpuSerial from factor to character
 gpu$gpuSerial = as.character(gpu$gpuSerial)
-
-
-# #Taking a sample of code
-# application_checkpoints <- application_checkpoints %>%
-#   setorder(-jobId)
-# 
-# application_checkpoints_filtered <- data.frame()
-# 
-# for (j in 1:300)
-#   {
-#   taskid <- unique(application_checkpoints$taskId)[j]
-#   temp <- application_checkpoints %>%
-#     filter(taskId == taskid)
-#   application_checkpoints_filtered <- rbind(application_checkpoints_filtered,temp)
-# }
-# application_checkpoints <- application_checkpoints_filtered
-
-
-
 
 
 ## Merging Application Checkpoints and GPU on hostname and similar timestamps
@@ -67,7 +51,7 @@ gpu_checkpoints <- gpu_checkpoints[,!names(gpu_checkpoints) %in% c("timestamp", 
 #Changing the name of the 8th column to timestamp
 names(gpu_checkpoints)[8]<-paste("timestamp")
 
-#Adding grouped_id for each Event Name in per Task Id
+#Adding grouped_id for each Event Name in each Task Id
 gpu_checkpoints <- gpu_checkpoints %>%
  setorder(taskId,eventName,eventType) %>%
  group_by(eventType) %>%
@@ -101,3 +85,50 @@ gpu_checkpoints_task <- gpu_checkpoints %>%
 #Filtering out only TotalRender
 gpu_checkpoints_task <- gpu_checkpoints_task %>%
   filter(eventName == "TotalRender")
+
+
+####### Question 3
+#Calculating time difference and storing the results in application_checkpoints_grouped
+#Adding grouped_id for each Event Name in per Task Id
+application_checkpoints_grouped <- data.frame(application_checkpoints %>%
+  setorder(taskId,eventName,eventType) %>%
+  group_by(eventType) %>%
+  mutate(grouped_id = row_number()))
+
+application_checkpoints_grouped <- application_checkpoints_grouped[,!names(application_checkpoints_grouped) %in% c("time")]
+
+#Spreading Event Type to Columns using Event Type as the Key and Timestamp as the values
+application_checkpoints_grouped <- application_checkpoints_grouped %>%
+  spread(eventType,timestamp)
+
+#Computing the eventTime
+application_checkpoints_grouped$eventTime_in_secs <- round(as.numeric(difftime(application_checkpoints_grouped$STOP, application_checkpoints_grouped$START,units ="sec")), 3)
+
+#Filtering the data for TotalRender values
+application_checkpoints_grouped <- application_checkpoints_grouped%>%
+  filter(eventName == "TotalRender")
+
+#Removing the grouped_id, START, STOP, jobId, taskId and eventName columns
+application_checkpoints_grouped <- application_checkpoints_grouped[,!names(application_checkpoints_grouped) %in% c("grouped_id", "START", "STOP","jobId","taskId","eventName")]
+
+#Grouping hostnames and aggregating eventTime by mean
+application_checkpoints_grouped <- application_checkpoints_grouped %>%
+  group_by(hostname) %>%
+  summarise_at(vars(eventTime_in_secs),
+               list(avg_eventTime_in_secs = mean))
+
+#Removing timestamp from the gpu data set and storing it in gpu_grouped
+gpu_grouped <- gpu[,!names(gpu) %in% c("timestamp")]
+
+#Grouping by powerDrawWatt,gpuTempC,gpuUtilPerc,gpuMemUtilPerc and aggregating by mean
+gpu_grouped <- gpu %>%
+  group_by(hostname, gpuSerial, gpuUUID) %>%
+  summarise_at(vars(powerDrawWatt,gpuTempC,gpuUtilPerc,gpuMemUtilPerc),
+               list(mean))
+
+#Joining application_checkpoints_grouped onto gpu_grouped by hostname to gpu_checkpoints_grouped
+gpu_checkpoints_grouped <- gpu_grouped %>%
+  left_join(application_checkpoints_grouped,by=c("hostname"))
+
+#Removing hostname and gpuUUid from gpu_checkpoints_grouped
+gpu_checkpoints_grouped <- data.frame(gpu_checkpoints_grouped[,!names(gpu_checkpoints_grouped) %in% c("hostname", "gpuUUID")])
