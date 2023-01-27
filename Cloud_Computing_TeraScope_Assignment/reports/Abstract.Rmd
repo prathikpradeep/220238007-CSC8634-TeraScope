@@ -1,0 +1,41 @@
+---
+title: "CSC8634 TeraScope Abstract"
+author: "Prathik Pradeep (220238007)"
+date: "2023-01-25"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir= normalizePath('..'))
+```
+
+
+``` {r ProjectTemplate, include=FALSE}
+library(ProjectTemplate); load.project()
+```
+
+# ABSTRACT
+
+Context - Computing terapixel visualisation using supercomputer scale resources is possible here by cloud computing technologies. GPUs are made accessible remotely and to an array of devices. Objective - The purpose of the project is to optimise these processes, which reduces computational time and therefore costs. Here the main objective is to evaluate the GPUs performances for individual events and levels, as well as an overall performance evaluation of the GPUs. Method - The CRISP-DM framework was used to carry out the analyses, ProjectTemplate was used to automate and organise the project and RMarkdown was used to produce an integrated report. Libraries like dplyr and ggplot were used for data wrangling and to produce high quality plots. Git was also used as a method of version control. Result - The Render event is the most computationally taxing, consuming 40.79W and taking 41.215s to render, which is similar to TotalRender. The GPU power draw and temperature for level 12 is 39W but takes the least amount of time to render, 42.588s. GPUs with a lower power supply, GPU utilisation, GPU memory utilisation and a higher GPU temperature have lower TotalRender times. A similar trend can be observed in Figure 1. It is also evident that two different GPUs are used. Novelty - This project provides a deeper understanding into how the GPUs react to each event. These insights can be used to further optimise the GPUs to perform better
+
+
+``` {r correlation plot, echo = FALSE ,warning = FALSE, fig.width=8, fig.height=8, fig.cap="Correlation Plot of GPU Metrics and Total Render Time"}
+#Creating data frame for a correlation plot 
+cor_plot <- gpu_checkpoints_grouped %>%
+  select("powerDrawWatt","gpuTempC","gpuUtilPerc","gpuMemUtilPerc","avg_eventTime_in_secs")
+
+#Chaning column names
+colnames(cor_plot) <- c("Power Draw","GPU Temperature","GPU Utilisation","GPU Memory Utilisation","Event Time secs")
+
+#Correlation plot for abstract
+corrplot(cor(cor_plot), 
+         method = 'color', 
+         type = "lower",
+         tl.col = "black",
+         insig = 'label_sig', 
+         pch.col = 'grey20', 
+         order = 'AOE',
+         addCoef.col = "white",
+         col=colorRampPalette(c("red","darkblue"))(200))
+```

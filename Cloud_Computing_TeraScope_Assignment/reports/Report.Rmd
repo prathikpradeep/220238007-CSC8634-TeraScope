@@ -1,7 +1,7 @@
 ---
-title: "220238007 - CSC8634 TeraScope"
-author: "Prathik Pradeep"
-date: "2023-01-24"
+title: CSC8634 TeraScope Analysis"
+author: "Prathik Pradeep (220238007)"
+date: "2023-01-12"
 output:
   pdf_document: default
 ---
@@ -15,7 +15,7 @@ knitr::opts_knit$set(root.dir= normalizePath('..'))
 library(ProjectTemplate); load.project()
 ```
 
-# 1   Question 1: Comparing Event Names with their Render Time and GPU Metrics 
+# 1   Comparing Event Names with their Render Time and GPU Metrics 
 
 ## 1.1    BUSINESS UNDERSTANDING
 ### 1.1.1 Business Objectives
@@ -169,7 +169,7 @@ As discussed in Chapter 1.3.2, having access to the GPU Utilisation and the GPU 
 
 
 
-# 2   Question 2: Comparing Zoom Level with their Processing Time and GPU Metrics
+# 2   Comparing Zoom Level with their Processing Time and GPU Metrics
 
 ## 2.1    BUSINESS UNDERSTANDING
 ### 2.1.1 Business Objectives
@@ -353,7 +353,7 @@ As discussed in Chapter 2.3.2, having access to the GPU Utilisation and the GPU 
 
 
 
-# 3   Question 3: Comparing the Different GPUs with their Average Metrics and Average Total Render Time 
+# 3   Comparing the Different GPUs with their Average Metrics and Average Total Render Time 
 
 ## 3.1    BUSINESS UNDERSTANDING
 ### 3.1.1 Business Objectives
@@ -465,7 +465,7 @@ ggarrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
 
 ## 3.5    EVALUATION AND FUTURE IMPLICATIONS
 
-As observed in Chapter 3.4, clear correlations can be observed when comparing the average GPU metrics with the average total render time. When comparing power draw, gpu utilisation and gpu memory utilisation to the total render time, a positive correlation can be observed. However, when comparing the GPU temperature to the total render time, a negative correlation can be observed. 
+As observed in Chapter 3.4, clear correlations can be observed when comparing the average GPU metrics with the average total render time. When comparing power draw, GPU utilisation and GPU memory utilisation to the total render time, a positive correlation can be observed. However, when comparing the GPU temperature to the total render time, a negative correlation can be observed. 
 
 In this case, a positive correlation means, as the GPU metric value increases, the total render time taken also decreases. Therefore, where a positive correlation is present, it means that as the GPU metrics increases, the total render time decreases.
 
@@ -477,6 +477,44 @@ Therefore, reflecting on the business objective from Chapter 3.1.1, it can be co
 ## 3.6    FUTURE SCOPE
 
 As discussed in Chapter 3.3.2, having more performance data about the GPUs as well as more GPU processors could help in delivering more detailed analyses and insights. Discovering more metrics to evaluate performance could also prove useful. 
+
+
+
+
+
+# 4   REFLECTION
+
+## 4.1    HOW THE TASK WAS APPROACHED
+
+The assignment was challenging and quite large, however, it did not contain excess out of scope learning. The approach of the task was quite straightforward and the CRISP-DM framework was followed with a slight modifications based on the requirements of the assignment. 
+
+
+## 4.2    TOOLS AND TECHNIQUES USED
+### 4.2.1   CRISP-DM
+Learning how to automate an entire process leads to much more ease in reproducibility and reduces clutter. It also makes the execution run a lot smoother. 
+
+The CRISP-DM framework is a relatively easy to follow, the layout goes along the general project workflow. The various stages in each step brought out a lot of clarity while working. The evaluation step is one of the best steps as it comments on the results of the modelling step and relates to the business objective which can bring in a lot of insight.
+
+### 4.2.2   Project Template
+
+Project Template is an extremely useful feature. After using it for the second time, it was very easy and seamless without the learning curve. A very intuitive library to streamline large coding projects. One of the most useful features here is the ability to automate the loading of data frames and saving it in the cache, this made picking up with the project after closing it was extremely fast and simple. Another very helpful feature is the ability to execute the munge directly as the project is loaded. This made it very streamlined and reduced the effort of running the preprocessing scripts while reopening the project. Another added benefit is that ProjectTemplate forces me to be more organized by saving different types of code in their respective folders.
+
+### 4.2.3   dplyr
+
+The dplyr library is extremely helpful and quick when it came to wrangling data. Throughout the assignment, a continuous learning cycle takes place with dplyr. Upon completion of the assignment, a realisation that dplyr’s applications are endless. A lot of the required wrangling would not have been possible without dplyr.
+
+### 4.2.4   ggplot
+
+The ggplot library is one of the most useful libraries. Using ggplot effectively generally involves the dplyr library as well. Ggplot can produce much better plots when compared to the base plots produced in R. The entire plot can be customized as per my requirements and is also very logical and straightforward.
+
+### 4.2.5   git
+
+The use of git for version control was a first, and seemed very daunting and complicated to set up. Loading the data files onto git proved to be a haste. However, once the required setup was completed, committing and pushing the code proved to be very easy. It also provides the added benefit of the code being online and also in different stages of the project cycle. This would be a big if reverting to an older version is required for any particular reason.
+
+## 4.3	THE TASK
+
+The data in general was not too difficult to understand, however, connecting the data from application_checkpoints and gpu proved to be very tricky as the timestamps in the two tables were not the same. The analysis present in the report brought a lot of insight to the assignment. These would have brought out better insights into the business objectives used. 
+
 
 
 

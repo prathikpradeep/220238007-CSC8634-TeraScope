@@ -122,4 +122,3 @@ gpu_checkpoints_grouped%>%
   ggtitle("GPU Memory Utilisation vs Total Render Time in secs") +
   labs(x = "Average GPU Memory Utilisation", y = "Average Total Render Time in secs") + 
   theme_minimal()
-
