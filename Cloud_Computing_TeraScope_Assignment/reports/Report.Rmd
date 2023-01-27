@@ -100,7 +100,7 @@ After joining the data sets, it can be observed that almost all the gpuUtilPerc 
 
 From Figure 1, it is observed that the event consuming the lowest energy is Saving Config followed by TotalRender, Render, Uploading and Tiling with the highest power consumption. When it comes to the average GPU temperature, the same trend is observed, however the difference in temperature between the different events are marginal. 
 
-``` {r eventName vs average powerDrawWatt and average gpuTempC, echo = FALSE, fig.width=12, fig.height=4, fig.cap="Graphical Summary of Relationship between Event Name vs Average Power Draw in Watt and Event Name vs Average GPU Tmep in C"}
+``` {r eventName vs average powerDrawWatt and average gpuTempC, echo = FALSE, fig.width=12, fig.height=6, fig.cap="Graphical Summary of Relationship between Event Name vs Average Power Draw in Watt and Event Name vs Average GPU Tmep in C"}
 #Graphical Summary of Event Name vs Average Power Consumed in Watts
 p1 <- gpu_checkpoints %>%
   group_by(eventName)%>%
@@ -281,7 +281,7 @@ In addition to this, from Table 3, it can be observed that the zoom level 4 has 
 
 From Figure 3, it is observed that the zoom level that consumes the least energy is zoom level 4 followed by zoom levels 8 and 12, with zoom level 12 having the highest power consumption. When it comes to comparing the zoom levels to the average GPU temperature, the same trend is observed, however the difference in temperature between the zoom levels 4 and 8 are marginal. 
 
-``` {r zoom level vs average powerDrawWatt and average gpuTempC, echo = FALSE, fig.width=12, fig.height=4, fig.cap="Graphical Summary of Relationship between Zoom Level vs Average Power Draw in Watt and Zoom Level vs Average GPU Temperature in C"}
+``` {r zoom level vs average powerDrawWatt and average gpuTempC, echo = FALSE, fig.width=12, fig.height=6, fig.cap="Graphical Summary of Relationship between Zoom Level vs Average Power Draw in Watt and Zoom Level vs Average GPU Temperature in C"}
 
 #Graphical Summary of Zoom Level vs Power Draw in Watts
 p1 <- gpu_checkpoints_task %>%
@@ -315,7 +315,7 @@ ggarrange(p1, p2, ncol = 2)
 
 ### 2.4.2    Relationship Between Zoom Level vs Render Time in ms
 
-``` {r Zoom Level vs Render Time in ms, echo = FALSE, fig.width=6, fig.height=4, fig.cap="Graphical Summary of Relationship Between Zoom Level vs Render Time in ms"}
+``` {r Zoom Level vs Render Time in ms, echo = FALSE, fig.width=4, fig.height=4, fig.cap="Graphical Summary of Relationship Between Zoom Level vs Render Time in ms"}
 #Graphical Summary of Zoom Level vs Render Time in ms
 gpu_checkpoints_task %>%
   group_by(level)%>%
@@ -481,16 +481,17 @@ As discussed in Chapter 3.3.2, having more performance data about the GPUs as we
 
 
 
+
 # 5   REFERENCES
 
 [1]   EXXACT (October 8, 2019). Top 5 Metrics for Evaluating Your Deep Learning Program's GPU Performance. Accessed on January 13, 2023. https://www.exxactcorp.com/blog/Deep-Learning/top-5-metrics-for-evaluating-your-deep-learning-program-s-gpu-performance
 
 [2]   Nicolas S. Holliman (February 2019) Petascale Cloud Supercomputing for Terapixel Visualization of a Digital Twin. Accessed on January 16, 2023. https://www.researchgate.net/publication/331086956_Petascale_Cloud_Supercomputing_for_Terapixel_Visualization_of_a_Digital_Twin
 
-[3]   https://www.researchgate.net/publication/354283459_AIPerf_Automated_machine_learning_as_an_AI-HPC_benchmark
+[3]   Zhixiang Ren (September 2021). AIPerf: Automated machine learning as an AI-HPC benchmark. Accessed on January 12,2023. https://www.researchgate.net/publication/354283459_AIPerf_Automated_machine_learning_as_an_AI-HPC_benchmark
 
-[4]   https://www.researchgate.net/publication/351440179_Resource_Aware_GPU_Scheduling_in_Kubernetes_Infrastructure/figures?lo=1
+[4]   Aggelos Ferikoglou (May 2021). Resource Aware GPU Scheduling in Kubernetes Infrastructure. Accessed on January 12,2023.
+https://www.researchgate.net/publication/351440179_Resource_Aware_GPU_Scheduling_in_Kubernetes_Infrastructure/figures?lo=1
 
-[5]   https://www.researchgate.net/publication/312966519_Characterizing_Power_and_Performance_of_GPU_Memory_Access
-
-[6]   https://computerinfobits.com/why-is-my-graphics-card-underperforming/
+[5]   Tyler Allen (November 2016). Characterizing Power and Performance of GPU Memory Access. Accessed on January 13,2023.
+https://www.researchgate.net/publication/312966519_Characterizing_Power_and_Performance_of_GPU_Memory_Access

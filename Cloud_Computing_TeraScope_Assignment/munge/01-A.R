@@ -1,8 +1,8 @@
 # setwd("/Volumes/Prathik/MSc Data Science/Semester 1/Block 3/Cloud Computing - CSC8634/Assignment/Assignment/220238007-CSC8634-TeraScope/Cloud_Computing_TeraScope_Assignment/data")
 # application_checkpoints <- read.csv("application_checkpoints.csv")
-
-library(ProjectTemplate)
-load.project()
+# 
+# library(ProjectTemplate)
+# load.project()
 
 #Setting seed so results are reproducible
 set.seed(220238007)

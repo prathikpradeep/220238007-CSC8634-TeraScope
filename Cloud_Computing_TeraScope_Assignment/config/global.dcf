@@ -2,7 +2,7 @@ version: 0.10.2
 data_loading: TRUE
 data_loading_header: TRUE
 data_ignore:
-cache_loading: FALSE
+cache_loading: TRUE
 recursive_loading: FALSE
 munging: TRUE
 logging: FALSE
@@ -12,7 +12,7 @@ libraries: reshape2, tidyverse, stringr, lubridate, rmarkdown, ggplot2, ggpubr, 
 as_factors: TRUE
 tables_type: tibble
 attach_internal_libraries: FALSE
-cache_loaded_data:  FALSE
+cache_loaded_data:  TRUE
 sticky_variables: NONE
 underscore_variables: TRUE
 cache_file_format: RData
